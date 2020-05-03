@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -23,9 +25,9 @@ namespace Nanoservices
             [HttpTrigger(authLevel: AuthorizationLevel.Function, "post", Route = "posts")]
             HttpRequest req,
             [CosmosDB(
-                databaseName: "Study",
-                collectionName: "Posts",
-                ConnectionStringSetting = "PostsDBConnectionString"
+                databaseName: ConnectionParams.DatabaseName,
+                collectionName: ConnectionParams.CollectionName,
+                ConnectionStringSetting = ConnectionParams.DbConnectionStringSetting
             )]
             IAsyncCollector<Post> collector,
             ILogger log
@@ -44,7 +46,9 @@ namespace Nanoservices
                 );
             }
 
-            if (data.Author == null || data.Body == null || data.Title == null)
+            if (new List<string?> {data.Author, data.Body, data.Title}.Any(
+                string.IsNullOrWhiteSpace
+            ))
             {
                 return new BadRequestObjectResult(
                     new {message = "One of the required fields is missing"}
@@ -52,7 +56,7 @@ namespace Nanoservices
             }
 
             await collector.AddAsync(
-                new Post {Author = data.Author, Body = data.Body, Title = data.Title}
+                new Post {Author = data.Author!, Body = data.Body!, Title = data.Title!}
             );
 
             return new OkResult();

@@ -17,9 +17,9 @@ namespace Nanoservices
             )]
             HttpRequest req,
             [CosmosDB(
-                databaseName: "Study",
-                collectionName: "Posts",
-                ConnectionStringSetting = "PostsDBConnectionString",
+                databaseName: ConnectionParams.DatabaseName,
+                collectionName: ConnectionParams.CollectionName,
+                ConnectionStringSetting = ConnectionParams.DbConnectionStringSetting,
                 PartitionKey = "{author}",
                 Id = "{id}"
             )]
