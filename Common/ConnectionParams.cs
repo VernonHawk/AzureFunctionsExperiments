@@ -1,4 +1,4 @@
-namespace Nanoservices
+namespace Common
 {
     public static class ConnectionParams
     {

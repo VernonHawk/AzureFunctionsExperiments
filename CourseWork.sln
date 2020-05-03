@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nanoservices", "Nanoservice
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceGlue", "ServiceGlue\ServiceGlue.csproj", "{7C294E94-5DFF-47DD-A006-993DEC8831B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{2604BDF5-1BE2-40AC-96D4-835662EC2A67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{7C294E94-5DFF-47DD-A006-993DEC8831B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C294E94-5DFF-47DD-A006-993DEC8831B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C294E94-5DFF-47DD-A006-993DEC8831B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2604BDF5-1BE2-40AC-96D4-835662EC2A67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2604BDF5-1BE2-40AC-96D4-835662EC2A67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2604BDF5-1BE2-40AC-96D4-835662EC2A67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2604BDF5-1BE2-40AC-96D4-835662EC2A67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

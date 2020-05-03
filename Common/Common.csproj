@@ -2,11 +2,9 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <AzureFunctionsVersion>V3</AzureFunctionsVersion>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.7" />
-        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.6" />
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.3" />
     </ItemGroup>
     <ItemGroup>
         <None Update="host.json">
@@ -16,8 +14,5 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
         </None>
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
 </Project>
