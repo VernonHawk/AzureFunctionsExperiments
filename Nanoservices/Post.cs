@@ -1,4 +1,4 @@
-namespace Common
+namespace Nanoservices
 {
     public class Post
     {
