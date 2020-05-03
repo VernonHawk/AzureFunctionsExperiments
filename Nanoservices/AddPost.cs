@@ -20,46 +20,51 @@ namespace Nanoservices
 
     public static class AddPost
     {
-        [FunctionName("AddPost")]
-        public static async Task<IActionResult> RunAsync(
-            [HttpTrigger(authLevel: AuthorizationLevel.Function, "post", Route = "posts")]
-            HttpRequest req,
-            [CosmosDB(
-                databaseName: ConnectionParams.DatabaseName,
-                collectionName: ConnectionParams.CollectionName,
-                ConnectionStringSetting = ConnectionParams.DbConnectionStringSetting
-            )]
-            IAsyncCollector<Post> collector,
-            ILogger log
-        )
+    [FunctionName("AddPost")]
+    public static async Task<IActionResult> RunAsync(
+        [HttpTrigger(
+            authLevel: AuthorizationLevel.Function,
+            "post",
+            Route = "posts"
+        )]
+        HttpRequest req,
+        [CosmosDB(
+            databaseName: ConnectionParams.DatabaseName,
+            collectionName: ConnectionParams.CollectionName,
+            ConnectionStringSetting = ConnectionParams.DbConnectionStringSetting
+        )]
+        IAsyncCollector<Post> collector,
+        ILogger log
+    )
+    {
+        var data = JsonConvert.DeserializeObject<RequestBody?>(
+            await new StreamReader(req.Body).ReadToEndAsync()
+        );
+
+        log.LogInformation($"AddPost {data}");
+
+        if (data == null)
         {
-            var data = JsonConvert.DeserializeObject<RequestBody?>(
-                await new StreamReader(req.Body).ReadToEndAsync()
+            return new BadRequestObjectResult(
+                new {message = "The body of the request is missing"}
             );
-
-            log.LogInformation($"AddPost {data}");
-
-            if (data == null)
-            {
-                return new BadRequestObjectResult(
-                    new {message = "The body of the request is missing"}
-                );
-            }
-
-            if (new List<string?> {data.Author, data.Body, data.Title}.Any(
-                string.IsNullOrWhiteSpace
-            ))
-            {
-                return new BadRequestObjectResult(
-                    new {message = "One of the required fields is missing"}
-                );
-            }
-
-            await collector.AddAsync(
-                new Post {Author = data.Author!, Body = data.Body!, Title = data.Title!}
-            );
-
-            return new OkResult();
         }
+
+        if (new List<string?> {data.Author, data.Body, data.Title}.Any(
+            string.IsNullOrWhiteSpace
+        ))
+        {
+            return new BadRequestObjectResult(
+                new {message = "One of the required fields is missing"}
+            );
+        }
+
+        // ...
+        await collector.AddAsync(
+            new Post {Author = data.Author!, Body = data.Body!, Title = data.Title!}
+        );
+
+        return new OkResult();
+    }
     }
 }

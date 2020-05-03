@@ -41,7 +41,7 @@ namespace Nanoservices
             var posts = client
                         .CreateDocumentQuery<Document>(
                             documentCollectionUri: collectionUri,
-                            feedOptions: new FeedOptions {EnableCrossPartitionQuery = true,}
+                            feedOptions: new FeedOptions {EnableCrossPartitionQuery = true}
                         )
                         .Where(d => d.Id == id);
 
