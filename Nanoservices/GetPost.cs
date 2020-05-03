@@ -10,17 +10,34 @@ namespace Nanoservices
     {
         [FunctionName("GetPost")]
         public static IActionResult RunAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "posts/{id:int}")]
+            [HttpTrigger(
+                authLevel: AuthorizationLevel.Function,
+                "get",
+                Route = "posts/{author}/{id}"
+            )]
             HttpRequest req,
-            int id,
+            [CosmosDB(
+                databaseName: "Study",
+                collectionName: "Posts",
+                ConnectionStringSetting = "PostsDBConnectionString",
+                PartitionKey = "{author}",
+                Id = "{id}"
+            )]
+            Post? post,
+            string id,
             ILogger log
         )
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"GetPost {post}");
 
-            string name = req.Query["id"];
+            if (post == null)
+            {
+                return new NotFoundObjectResult(
+                    new {message = $"Couldn't find a post with id {id}"}
+                );
+            }
 
-            return new OkObjectResult($"Hello, {name} {id}");
+            return new OkObjectResult(post);
         }
     }
 }

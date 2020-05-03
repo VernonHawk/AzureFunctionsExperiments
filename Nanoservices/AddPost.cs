@@ -11,9 +11,9 @@ namespace Nanoservices
 {
     internal class RequestBody
     {
-        public string Title { get; set; } = "";
-        public string Author { get; set; } = "";
-        public string Body { get; set; } = "";
+        public string? Title { get; set; }
+        public string? Author { get; set; }
+        public string? Body { get; set; }
     }
 
     public static class AddPost
@@ -22,18 +22,40 @@ namespace Nanoservices
         public static async Task<IActionResult> RunAsync(
             [HttpTrigger(authLevel: AuthorizationLevel.Function, "post", Route = "posts")]
             HttpRequest req,
+            [CosmosDB(
+                databaseName: "Study",
+                collectionName: "Posts",
+                ConnectionStringSetting = "PostsDBConnectionString"
+            )]
+            IAsyncCollector<Post> collector,
             ILogger log
         )
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            var data = JsonConvert.DeserializeObject<RequestBody>(
+            var data = JsonConvert.DeserializeObject<RequestBody?>(
                 await new StreamReader(req.Body).ReadToEndAsync()
             );
 
-            var post = new Post {Author = data.Author, Body = data.Body, Title = data.Title};
+            log.LogInformation($"AddPost {data}");
 
-            return new OkObjectResult($"Hello, {post.Author}");
+            if (data == null)
+            {
+                return new BadRequestObjectResult(
+                    new {message = "The body of the request is missing"}
+                );
+            }
+
+            if (data.Author == null || data.Body == null || data.Title == null)
+            {
+                return new BadRequestObjectResult(
+                    new {message = "One of the required fields is missing"}
+                );
+            }
+
+            await collector.AddAsync(
+                new Post {Author = data.Author, Body = data.Body, Title = data.Title}
+            );
+
+            return new OkResult();
         }
     }
 }
