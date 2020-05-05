@@ -11,6 +11,6 @@ namespace DistributedComputing
         public static IList<Group<string, int>> WordCount_Group(
             [ActivityTrigger] IList<Result<string, int>>[] mapResults
         ) =>
-            Grouper.GroupResults(mapResults);
+            Grouping.GroupResults(mapResults);
     }
 }

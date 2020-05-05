@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using DistributedComputing.MapReduce;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Extensions.Logging;
 
 namespace DistributedComputing
 {
@@ -13,8 +12,7 @@ namespace DistributedComputing
     {
         [FunctionName(nameof(WordCount))]
         public static async Task<List<string>> WordCountOrchestrator(
-            [OrchestrationTrigger] IDurableOrchestrationContext context,
-            ILogger log
+            [OrchestrationTrigger] IDurableOrchestrationContext context
         )
         {
             var input = context.GetInput<WordCountInput>();
@@ -24,7 +22,7 @@ namespace DistributedComputing
                 options: StringSplitOptions.RemoveEmptyEntries
             );
 
-            var batchParams = GetBatchParams(lines.Length);
+            var batchParams = Batching.GetBatchParams(lines.Length);
 
             var mapResults = await Task.WhenAll(
                 Enumerable.Range(start: 0, count: batchParams.BatchesAmount)
@@ -62,25 +60,5 @@ namespace DistributedComputing
 
             return new List<string>();
         }
-
-        private static BatchParams GetBatchParams(int dataSize)
-        {
-            var batchSizeRaw = Math.Sqrt(dataSize);
-
-            return new BatchParams(
-                size: (int) Math.Floor(batchSizeRaw),
-                amount: (int) Math.Ceiling(batchSizeRaw)
-            );
-        }
-
-        private class BatchParams
-        {
-            public int BatchSize { get; }
-            public int BatchesAmount { get; }
-
-            public BatchParams(int size, int amount) => (BatchSize, BatchesAmount) = (size, amount);
-        }
     }
-
-
 }

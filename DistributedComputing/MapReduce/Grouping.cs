@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace DistributedComputing.MapReduce
 {
-    public static class Grouper
+    public static class Grouping
     {
         public static IList<Group<KeyT, ValueT>> GroupResults<KeyT, ValueT>(
             IEnumerable<IList<Result<KeyT, ValueT>>> results
