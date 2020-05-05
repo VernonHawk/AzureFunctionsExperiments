@@ -28,11 +28,10 @@ namespace DistributedComputing
                 )
             );
 
-            var groups =
-                await ctx.CallActivityAsync<IList<Group<string, int>>>(
-                    functionName: nameof(WordCountGroup),
-                    input: mapResults
-                );
+            var groups = await ctx.CallActivityAsync<IList<Group<string, int>>>(
+                functionName: nameof(WordCountGroup),
+                input: mapResults
+            );
 
             var reduceResults = await Task.WhenAll(
                 groups.Select(

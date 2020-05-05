@@ -12,7 +12,7 @@ namespace DistributedComputing
         [FunctionName(nameof(WordCountMap))]
         public static IList<Result<string, int>>
             WordCount_Map([ActivityTrigger] IList<string> lines) =>
-            lines.SelectMany(ToTerms).Select(ToResult).ToList();
+            lines.SelectMany(ToTerms).Select(ToMapReduceResult).ToList();
 
         private const string Separators =
             " ,?!.…:;—-+/*^=~@#№%&§<>|\\(){}[]_'’‘`\"“”\n\t\r $£";
@@ -20,6 +20,7 @@ namespace DistributedComputing
         private static readonly IReadOnlyCollection<string>
             Redundancies = new HashSet<string>
             {
+                "t",
                 "m",
                 "s",
                 "re",
@@ -33,7 +34,7 @@ namespace DistributedComputing
         private static IEnumerable<string> ToWords(string text, string separators = Separators) =>
             text.Split(separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-        private static Result<string, int> ToResult(string word) =>
+        private static Result<string, int> ToMapReduceResult(string word) =>
             new Result<string, int>(word, 1);
     }
 }
