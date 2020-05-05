@@ -12,41 +12,31 @@ namespace DistributedComputing
     {
         [FunctionName(nameof(WordCount))]
         public static async Task<List<string>> WordCountOrchestrator(
-            [OrchestrationTrigger] IDurableOrchestrationContext context
+            [OrchestrationTrigger] IDurableOrchestrationContext ctx
         )
         {
-            var input = context.GetInput<WordCountInput>();
+            var input = ctx.GetInput<WordCountInput>();
 
-            var lines = input.Content.Split(
-                separator: new[] {'\r', '\n'},
-                options: StringSplitOptions.RemoveEmptyEntries
-            );
-
-            var batchParams = Batching.GetBatchParams(lines.Length);
+            var batches = Batching.ToBatches(ToLines(input.Content));
 
             var mapResults = await Task.WhenAll(
-                Enumerable.Range(start: 0, count: batchParams.BatchesAmount)
-                          .Select(
-                              batchNum =>
-                                  context.CallActivityAsync<IList<Result<string, int>>>(
-                                      functionName: nameof(WordCountMap),
-                                      input: lines
-                                             .Skip(batchNum * batchParams.BatchSize)
-                                             .Take(batchParams.BatchSize)
-                                             .ToList()
-                                  )
-                          )
+                batches.Select(
+                    batch => ctx.CallActivityAsync<IList<Result<string, int>>>(
+                        functionName: nameof(WordCountMap),
+                        input: batch
+                    )
+                )
             );
 
             var groups =
-                await context.CallActivityAsync<IList<Group<string, int>>>(
+                await ctx.CallActivityAsync<IList<Group<string, int>>>(
                     functionName: nameof(WordCountGroup),
                     input: mapResults
                 );
 
             var reduceResults = await Task.WhenAll(
                 groups.Select(
-                    group => context.CallActivityAsync<Result<string, int>>(
+                    group => ctx.CallActivityAsync<Result<string, int>>(
                         functionName: nameof(WordCountReduce),
                         input: group
                     )
@@ -60,5 +50,11 @@ namespace DistributedComputing
 
             return new List<string>();
         }
+
+        private static string[] ToLines(string content) =>
+            content.Split(
+                separator: new[] {'\r', '\n'},
+                options: StringSplitOptions.RemoveEmptyEntries
+            );
     }
 }
