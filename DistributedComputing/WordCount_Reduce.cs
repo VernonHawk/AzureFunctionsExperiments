@@ -8,7 +8,7 @@ namespace DistributedComputing
     public class WordCountReduce
     {
         [FunctionName(nameof(WordCountReduce))]
-        public static async Task<string> Run([ActivityTrigger] string name, ILogger log)
+        public static async Task<string> WordCount_Reduce([ActivityTrigger] string name, ILogger log)
         {
             log.LogInformation($"Saying hello to {name}.");
 

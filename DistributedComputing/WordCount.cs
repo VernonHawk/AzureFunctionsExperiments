@@ -1,13 +1,9 @@
 using System;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 
 namespace DistributedComputing
@@ -15,7 +11,7 @@ namespace DistributedComputing
     public static class WordCount
     {
         [FunctionName(nameof(WordCount))]
-        public static async Task<List<string>> RunOrchestrator(
+        public static async Task<List<string>> WordCountOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log
         )
@@ -33,18 +29,25 @@ namespace DistributedComputing
             var mapResults = await Task.WhenAll(
                 Enumerable.Range(start: 0, count: (int) Math.Ceiling(batchSizeRaw))
                           .Select(
-                              batchNum => context.CallActivityAsync<IList<MapResultEntry>>(
+                              batchNum => context.CallActivityAsync<IList<MapResult<string, int>>>(
                                   functionName: nameof(WordCountMap),
                                   input: lines.Skip(batchNum * batchSize).Take(batchSize).ToList()
                               )
                           )
             );
 
-            foreach (var e in mapResults[0])
+            var groups =
+                await context.CallActivityAsync<IList<WordCountGroup.Group<string, int>>>(
+                    functionName: nameof(WordCountGroup),
+                    input: mapResults
+                );
+
+            Console.WriteLine(groups[0].Key);
+
+            foreach (var e in groups[0].Values)
             {
                 Console.WriteLine(e);
             }
-
 
             return new List<string>();
         }
