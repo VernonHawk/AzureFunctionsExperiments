@@ -33,14 +33,18 @@ namespace DistributedComputing
             var mapResults = await Task.WhenAll(
                 Enumerable.Range(start: 0, count: (int) Math.Ceiling(batchSizeRaw))
                           .Select(
-                              batchNum => context.CallActivityAsync<IList<string>>(
+                              batchNum => context.CallActivityAsync<IList<MapResultEntry>>(
                                   functionName: nameof(WordCountMap),
                                   input: lines.Skip(batchNum * batchSize).Take(batchSize).ToList()
                               )
                           )
             );
 
-            Console.WriteLine(mapResults.Length);
+            foreach (var e in mapResults[0])
+            {
+                Console.WriteLine(e);
+            }
+
 
             return new List<string>();
         }
