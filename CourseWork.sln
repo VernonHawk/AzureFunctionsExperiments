@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nanoservices", "Nanoservice
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceGlue", "ServiceGlue\ServiceGlue.csproj", "{7C294E94-5DFF-47DD-A006-993DEC8831B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedComputing", "DistributedComputing\DistributedComputing.csproj", "{EA71CB70-20AC-4A5D-8223-D6A849F170EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{7C294E94-5DFF-47DD-A006-993DEC8831B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C294E94-5DFF-47DD-A006-993DEC8831B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C294E94-5DFF-47DD-A006-993DEC8831B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
