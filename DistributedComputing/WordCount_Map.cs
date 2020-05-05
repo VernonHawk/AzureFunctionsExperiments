@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DistributedComputing.MapReduce;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace DistributedComputing
 {
-    public class WordCountMap
+    public static class WordCountMap
     {
         [FunctionName(nameof(WordCountMap))]
-        public static IList<MapResult<string, int>>
+        public static IList<Result<string, int>>
             WordCount_Map([ActivityTrigger] IList<string> lines) =>
-            lines.SelectMany(ToTerms).Select(ToMapResult).ToList();
+            lines.SelectMany(ToTerms).Select(ToResult).ToList();
 
         private const string Separators =
             " ,?!.…:;—-+/*^=~@#№%&§<>|\\(){}[]_'’‘`\"“”\n\t\r $£";
@@ -32,17 +33,7 @@ namespace DistributedComputing
         private static IEnumerable<string> ToWords(string text, string separators = Separators) =>
             text.Split(separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-        private static MapResult<string, int> ToMapResult(string word) =>
-            new MapResult<string, int>(word, 1);
-    }
-
-    public class MapResult<KeyT, ValueT>
-    {
-        public KeyT Key { get; set; }
-        public ValueT Value { get; set; }
-
-        public MapResult(KeyT key, ValueT value) => (Key, Value) = (key, value);
-
-        public override string ToString() => $"{Key}: {Value}";
+        private static Result<string, int> ToResult(string word) =>
+            new Result<string, int>(word, 1);
     }
 }

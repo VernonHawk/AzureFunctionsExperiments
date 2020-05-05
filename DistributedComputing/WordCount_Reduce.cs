@@ -1,18 +1,19 @@
 using System.Threading.Tasks;
+using DistributedComputing.MapReduce;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 
 namespace DistributedComputing
 {
-    public class WordCountReduce
+    public static class WordCountReduce
     {
         [FunctionName(nameof(WordCountReduce))]
-        public static async Task<string> WordCount_Reduce([ActivityTrigger] string name, ILogger log)
+        public static async Task<string> WordCount_Reduce(
+            [ActivityTrigger] Group<string, int> group
+        )
         {
-            log.LogInformation($"Saying hello to {name}.");
-
-            return $"Hello {name}!";
+            return $"Hello !";
         }
     }
 }

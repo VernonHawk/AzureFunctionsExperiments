@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DistributedComputing
 {
-    public class WordCountOutput
+    public static class WordCountOutput
     {
         [FunctionName(nameof(WordCountOutput))]
         public static async Task<string> Run([ActivityTrigger] string name, ILogger log)
