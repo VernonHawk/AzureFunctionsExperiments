@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -9,7 +10,8 @@ namespace DistributedComputing
     {
         [FunctionName(nameof(WordCountTrigger))]
         public static async Task WordCount_Trigger(
-            [BlobTrigger("word-count/input/{name}")] string file,
+            [BlobTrigger("word-count/input/{name}")]
+            string file,
             string name,
             [DurableClient] IDurableOrchestrationClient starter,
             ILogger log
