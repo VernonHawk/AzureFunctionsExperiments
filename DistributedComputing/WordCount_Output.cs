@@ -13,26 +13,15 @@ namespace DistributedComputing
     {
         [FunctionName(nameof(WordCountOutput))]
         public static async Task WordCount_Output(
-            [ActivityTrigger] WordCountOutputArgs args,
+            [ActivityTrigger] Result<string, int>[] results,
             [Blob("word-count/output/word-count.txt", FileAccess.Write)]
             TextWriter output
-        )
-        {
-            var wordCount = string.Join(
-                separator: '\n',
-                values: args.Results.Select(res => $"{res.Key}:{res.Value}")
+        ) =>
+            await output.WriteAsync(
+                string.Join(
+                    separator: '\n',
+                    values: results.Select(res => $"{res.Key}:{res.Value}")
+                )
             );
-
-            await output.WriteAsync(wordCount);
-        }
-    }
-
-    public class WordCountOutputArgs
-    {
-        public string FileName { get; set; }
-        public Result<string, int>[] Results { get; set; }
-
-        public WordCountOutputArgs(string fileName, Result<string, int>[] results) =>
-            (FileName, Results) = (fileName, results);
     }
 }

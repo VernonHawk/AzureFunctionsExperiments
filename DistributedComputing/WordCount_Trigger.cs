@@ -13,16 +13,11 @@ namespace DistributedComputing
             [BlobTrigger("word-count/input/{name}")]
             string file,
             string name,
-            [DurableClient] IDurableOrchestrationClient starter,
-            ILogger log
-        )
-        {
-            var instanceId = await starter.StartNewAsync(
+            [DurableClient] IDurableOrchestrationClient starter
+        ) =>
+            await starter.StartNewAsync(
                 orchestratorFunctionName: nameof(WordCount),
                 input: new WordCountInput {Name = name, Content = file}
             );
-
-            log.LogInformation($"Started orchestration with ID = {instanceId}.");
-        }
     }
 }

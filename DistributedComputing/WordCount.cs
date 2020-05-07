@@ -53,7 +53,7 @@ namespace DistributedComputing
 
             await ctx.CallActivityAsync<string>(
                 functionName: nameof(WordCountOutput),
-                input: new WordCountOutputArgs(fileName: input.Name, results: reduceResults)
+                input: reduceResults
             );
 
             log.LogInformation("After outputting");
