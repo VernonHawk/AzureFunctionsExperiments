@@ -11,7 +11,7 @@ namespace DistributedComputing
     public static class WordCount
     {
         [FunctionName(nameof(WordCount))]
-        public static async Task<List<string>> WordCountOrchestrator(
+        public static async Task WordCountOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext ctx
         )
         {
@@ -42,12 +42,10 @@ namespace DistributedComputing
                 )
             );
 
-            foreach (var res in reduceResults.Take(100))
-            {
-                Console.WriteLine(res);
-            }
-
-            return new List<string>();
+            await ctx.CallActivityAsync<string>(
+                functionName: nameof(WordCountOutput),
+                input: new WordCountOutputArgs(fileName: input.Name, results: reduceResults)
+            );
         }
 
         private static string[] ToLines(string content) =>

@@ -29,7 +29,9 @@ namespace DistributedComputing
             };
 
         private static IEnumerable<string> ToTerms(string text) =>
-            ToWords(text).Where(word => !Redundancies.Contains(word));
+            ToWords(text)
+                .Select(word => word.ToLower())
+                .Where(word => !Redundancies.Contains(word));
 
         private static IEnumerable<string> ToWords(string text, string separators = Separators) =>
             text.Split(separators.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
