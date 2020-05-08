@@ -6,18 +6,17 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace ActorModel
 {
-    public static class ReplenishAccount
+    public static class WithdrawTrigger
     {
-        [FunctionName(nameof(ReplenishAccount))]
-        public static async Task<IActionResult> ReplenishAccountFun(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "replenish")]
+        [FunctionName(nameof(WithdrawTrigger))]
+        public static async Task<IActionResult> WithdrawTriggerFun(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "withdraw")]
             HttpRequest req,
-            [DurableClient] IDurableEntityClient client
+            [DurableClient] IDurableOrchestrationClient client
         )
         {
             var data = JsonConvert.DeserializeObject<RequestBody?>(
@@ -31,12 +30,9 @@ namespace ActorModel
                 );
             }
 
-            await client.SignalEntityAsync<IAccount>(
-                entityKey: data.Account,
-                operation: account => account.Replenish(data.Amount.Value)
-            );
+            var id = await client.StartNewAsync(nameof(Withdraw), data);
 
-            return new OkObjectResult(new {message = "Successfully replenished"});
+            return new OkObjectResult(new {orchestrationId = id});
         }
 
         private class RequestBody
