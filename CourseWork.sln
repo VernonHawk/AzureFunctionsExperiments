@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceGlue", "ServiceGlue\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedComputing", "DistributedComputing\DistributedComputing.csproj", "{EA71CB70-20AC-4A5D-8223-D6A849F170EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActorModel", "ActorModel\ActorModel.csproj", "{DC4E93E6-D634-4AD7-AD79-1142C2520542}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA71CB70-20AC-4A5D-8223-D6A849F170EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4E93E6-D634-4AD7-AD79-1142C2520542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4E93E6-D634-4AD7-AD79-1142C2520542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4E93E6-D634-4AD7-AD79-1142C2520542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4E93E6-D634-4AD7-AD79-1142C2520542}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
