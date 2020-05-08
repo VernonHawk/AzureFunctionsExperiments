@@ -7,7 +7,7 @@ namespace ActorModel
 {
     public interface IAccount
     {
-        void Replenish(decimal amount);
+        Task Replenish(decimal amount);
 
         Task<bool> Withdraw(decimal amount);
 
@@ -19,7 +19,12 @@ namespace ActorModel
     {
         public decimal Balance { get; set; } = decimal.Zero;
 
-        public void Replenish(decimal amount) => Balance += amount;
+        public Task Replenish(decimal amount)
+        {
+            Balance += amount;
+
+            return Task.CompletedTask;
+        }
 
         public Task<bool> Withdraw(decimal amount)
         {
