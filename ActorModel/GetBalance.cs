@@ -17,10 +17,9 @@ namespace ActorModel
             [DurableClient] IDurableEntityClient client
         )
         {
-            var entity =
-                await client.ReadEntityStateAsync<Account>(
-                    new EntityId(entityName: nameof(Account), entityKey: account)
-                );
+            var entity = await client.ReadEntityStateAsync<Account>(
+                new EntityId(entityName: nameof(Account), entityKey: account)
+            );
 
             if (!entity.EntityExists)
             {

@@ -14,7 +14,6 @@ namespace ActorModel
         Task<decimal> GetBalance();
     }
 
-    [JsonObject(MemberSerialization.OptOut)]
     public class Account : IAccount
     {
         public decimal Balance { get; set; } = decimal.Zero;
