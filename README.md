@@ -1,4 +1,4 @@
-# AzureFunctionsExperiments
+# Azure Functions Experiments
 My experiments with Azure Functions, featuring 4 small PoCs.
 
 ## HTTP nanoservices
@@ -12,3 +12,6 @@ Own MapReduce implementation including the WordCount algorithm for a file upload
 
 ## Actor model
 Bank accounts management, including transfer between two accounts, using Durable Entities.
+
+## License
+This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
