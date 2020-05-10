@@ -9,7 +9,7 @@ namespace Nanoservices
     public static class GetPost
     {
         [FunctionName("GetPost")]
-        public static IActionResult RunAsync(
+        public static IActionResult GetPostFun(
             [HttpTrigger(
                 authLevel: AuthorizationLevel.Function,
                 "get",
@@ -18,26 +18,18 @@ namespace Nanoservices
             HttpRequest req,
             [CosmosDB(
                 databaseName: ConnectionParams.DatabaseName,
-                collectionName: ConnectionParams.CollectionName,
+                collectionName: "Posts",
                 ConnectionStringSetting = ConnectionParams.DbConnectionStringSetting,
                 PartitionKey = "{author}",
                 Id = "{id}"
             )]
             Post? post,
-            string id,
-            ILogger log
-        )
-        {
-            log.LogInformation($"GetPost {post}");
-
-            if (post == null)
-            {
-                return new NotFoundObjectResult(
+            string id
+        ) =>
+            post == null
+                ? new NotFoundObjectResult(
                     new {message = $"Couldn't find a post with id {id}"}
-                );
-            }
-
-            return new OkObjectResult(post);
-        }
+                )
+                : (IActionResult) new OkObjectResult(post);
     }
 }

@@ -13,7 +13,7 @@ namespace Nanoservices
     public static class DeletePost
     {
         [FunctionName("DeletePost")]
-        public static async Task<IActionResult> RunAsync(
+        public static async Task<IActionResult> DeletePostFun(
             [HttpTrigger(
                 authLevel: AuthorizationLevel.Function,
                 "delete",
@@ -27,12 +27,9 @@ namespace Nanoservices
             )]
             DocumentClient client,
             string author,
-            string id,
-            ILogger log
+            string id
         )
         {
-            log.LogInformation($"DeletePost {id}");
-
             var collectionUri = UriFactory.CreateDocumentCollectionUri(
                 databaseId: ConnectionParams.DatabaseName,
                 collectionId: ConnectionParams.CollectionName

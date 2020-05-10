@@ -21,7 +21,7 @@ namespace Nanoservices
     public static class AddPost
     {
         [FunctionName("AddPost")]
-        public static async Task<IActionResult> RunAsync(
+        public static async Task<IActionResult> AddPostFun(
             [HttpTrigger(
                 authLevel: AuthorizationLevel.Function,
                 "post",
@@ -33,15 +33,12 @@ namespace Nanoservices
                 collectionName: ConnectionParams.CollectionName,
                 ConnectionStringSetting = ConnectionParams.DbConnectionStringSetting
             )]
-            IAsyncCollector<Post> collector,
-            ILogger log
+            IAsyncCollector<Post> collector
         )
         {
             var data = JsonConvert.DeserializeObject<RequestBody?>(
                 await new StreamReader(req.Body).ReadToEndAsync()
             );
-
-            log.LogInformation($"AddPost {data}");
 
             if (data == null)
             {
